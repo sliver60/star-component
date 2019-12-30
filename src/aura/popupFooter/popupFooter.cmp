@@ -1,0 +1,20 @@
+<aura:component >
+    
+    <aura:handler event="force:showToast" action="{!c.closePopup}"/>
+    
+    <aura:attribute name="contact" type="Object" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <lightning:button variant="brand"
+                      label="View"
+                      title="View"
+                      onclick="{!c.viewRecord}"/>
+    <lightning:button variant="brand"
+                      label="Edit"
+                      title="Edit"
+                      onclick="{!c.editRecord}"/>
+    <lightning:button variant="neutral"
+                      label="Close"
+                      title="Close"
+                      onclick="{!c.closePopup}"/>
+</aura:component>

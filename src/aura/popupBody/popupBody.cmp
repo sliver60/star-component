@@ -1,0 +1,61 @@
+<aura:component >
+    <aura:attribute name="contact" type="Object" />
+    
+    <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">First Name</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.FirstName}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">Last Name</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.LastName}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">Phone</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.Phone}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">Email</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.Email}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">MobilePhone</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.MobilePhone}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                <span class="slds-form-element__label">Account</span>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{!v.contact.Account.Name}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

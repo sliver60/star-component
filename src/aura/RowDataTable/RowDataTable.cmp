@@ -1,0 +1,22 @@
+<aura:component >
+    
+    <aura:handler event="force:showToast" action="{!c.refresh}"/>
+    <aura:attribute name="contact" type="Object" />
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div onclick="{!c.openPopup}">
+        <lightning:tile label="{!v.contact.Name}">
+            <aura:set attribute="media">
+                <lightning:avatar src="/docs/component-library/app/images/examples/avatar1.jpg"
+                                  fallbackIconName="standard:person_account"
+                                  alternativeText="{!v.contact.Name}"/>
+            </aura:set>
+            <ul class="slds-list_horizontal slds-has-dividers_right">
+                <li class="slds-item">{!v.contact.Phone}</li>
+                <li class="slds-item">{!v.contact.Email}</li>
+            </ul>
+        </lightning:tile>
+    </div>
+    
+</aura:component>

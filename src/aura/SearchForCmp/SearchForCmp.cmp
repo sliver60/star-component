@@ -1,0 +1,30 @@
+<aura:component >
+    
+    <aura:registerEvent name="stringCmpEvent" type="c:EventForSearch" />
+    <aura:attribute name="searchString" type="String"/>
+    
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <div class="slds-m-left_medium">
+                <div onkeyup="{!c.fireSearchEvent}">
+                    <lightning:input aura:id="filter"
+                                     name="enter-search"
+                                     label="Click the 'Search' button or press the 'Enter' key to search"
+                                     type="search"
+                                     placeholder="Search contact..."
+                                     value="{!v.searchString}" />
+                </div>
+            </div>
+        </div>
+        <div class="slds-col">
+            <div class="slds-m-top_large">
+                <lightning:button name="btnsearch" variant="brand" label="Search" title="Search button" onclick="{!c.fireSearchEvent}" />
+            </div>
+        </div>
+        <div class="slds-col">
+        </div>
+        <div class="slds-col">
+        </div>
+    </div>
+    
+</aura:component>
