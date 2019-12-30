@@ -1,0 +1,33 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="ContactComponentController" access="global">
+    
+    <aura:attribute name="mydata" type="List"/>
+    <aura:attribute name="maxRecordsLimit" type="Integer" default="0"/>
+    <aura:attribute name="countContacts" type="Integer" default="0"/>
+    <aura:attribute name="amountRecords" type="Integer" default="0"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+	<!-- EventForSearch -->
+    <aura:attribute name="searchString" type="String"/>
+    <aura:handler name="stringCmpEvent" event="c:EventForSearch" action="{!c.searchContacts}"/>
+    <!-- EventForSearch -->
+    
+    <lightning:card title="Contacts" iconName="standard:contact">
+        <c:SearchForCmp/>
+        <c:DataTableCmp mydata="{!v.mydata}"/>
+        
+        <div class="slds-align_absolute-center">
+            <aura:if isTrue="{!lessthan(v.mydata.length,v.countContacts)}">
+                <a href="javascript:void(0);" onclick="{!c.addToListShow}">Load More</a>
+            </aura:if>
+            
+            <aura:if isTrue="{!or((v.mydata.length == v.countContacts),(v.mydata.length > v.countContacts))}">
+                <a href="javascript:void(0);" onclick="myfunction()"></a>
+            </aura:if>
+        </div>
+        
+        <lightning:spinner aura:id="Spinner" alternativeText="Loading" size="medium" variant="brand" class="slds-hide"/>
+        
+    </lightning:card>
+    
+</aura:component>
