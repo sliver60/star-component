@@ -1,0 +1,58 @@
+<aura:component controller="RatingController" implements="force:hasRecordId,flexipage:availableForAllPageTypes">
+    <ltng:require styles="/resource/RatingPlugin/css/jquery.raty.css, /resource/SLDS0120/assets/styles/salesforce-lightning-design-system-ltng.css"
+                  scripts="/resource/RatingPlugin/js/jquery.js, /resource/RatingPlugin/js/jquery.raty.js"
+                  afterScriptsLoaded="{!c.doInit}"/>
+
+    <aura:attribute type="ID" name="recordId"/>
+    <aura:attribute type="Integer" name="currentRating"/>
+    <aura:attribute type="Integer" name="newRating" default="0"/>
+    <aura:attribute type="Integer" name="userRating"/>
+    <aura:attribute type="Boolean" name = "showBool" default="true"/>
+
+    <aura:handler name="init" value="{! this }" action="{!c.handleUserRating }"/>
+
+    <div class="slds">
+        <div class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <lightning:icon iconName="custom:custom11" size="medium" alternativeText="Star"/>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading--small slds-truncate">&nbsp;How much do you rate this?</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-card__body">
+                <div class="loading-div" style="height:6rem">
+                        <div class="slds-spinner_container">
+                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                </div>
+                <div aura:id="starRating" class="star-rating"></div>
+            </div>
+            <div class="slds-card__footer">
+                <div class="footer-contents">
+                    <div style="display: inline-block;">
+                        Current Rating: <span aura:id="rating">{!v.currentRating}&nbsp;star&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-card__footer">
+                <div class="footer-contents">
+                    <div style="display: inline-block;">
+                        Your Rating: <span aura:id="rating">{!v.userRating}&nbsp;star</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <c:ViewComment recordId = "{!v.recordId}">
+        </c:ViewComment>
+    </div>
+            <lightning:button variant="brand" label="Create Rating" title="Save" onclick="{!c.handleInsertRecord}" />
+</aura:component>

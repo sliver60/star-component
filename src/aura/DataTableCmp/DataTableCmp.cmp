@@ -1,0 +1,17 @@
+<aura:component >
+    
+    <aura:attribute name="mydata" type="List"/>
+    
+    <div class="slds-m-around_x-small">
+        <div class="slds-m-top_small">
+            <ul class="slds-has-dividers_bottom-space">
+                <aura:iteration items="{!v.mydata}" var="item">
+                    <li class="slds-item">
+                        <c:RowDataTable contact="{!item}" />
+                    </li>
+                </aura:iteration>
+            </ul>
+        </div>
+    </div>
+    
+</aura:component>

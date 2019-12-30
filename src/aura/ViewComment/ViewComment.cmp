@@ -1,0 +1,25 @@
+<aura:component controller="ViewCommetCtrl" implements="force:hasRecordId,flexipage:availableForAllPageTypes">
+    <aura:attribute name="data" type="SObject[]" />
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="comment" type="String"/>
+
+    <aura:handler name="init" value="{! this }" action="{!c.doInit}"/>
+
+    <div>
+        <lightning:datatable
+                keyField="id"
+                data="{! v.data }"
+                columns="{! v.columns }"
+                hideCheckboxColumn="true"/>
+    </div>
+    <div>
+        <lightning:textarea label="Add interesting comment" placeholder="Type here..." value="{!v.comment}"/>
+
+    </div>
+
+    <div style="display: inline-block;">
+        <lightning:button variant="brand" label="Post" title="Save"  onclick="{!c.handlePostComment}" />
+    </div>
+
+
+</aura:component>
