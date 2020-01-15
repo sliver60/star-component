@@ -5,11 +5,7 @@
 
     <aura:attribute type="ID" name="recordId"/>
     <aura:attribute type="Integer" name="currentRating"/>
-    <aura:attribute type="Integer" name="newRating" default="0"/>
-    <aura:attribute type="Integer" name="userRating"/>
     <aura:attribute type="Boolean" name = "showBool" default="true"/>
-
-    <!--<aura:handler name="check" value="{!this}" action="{!c.handleCheckRating}"/>-->
 
     <aura:if isTrue="{!v.showBool}">
     <lightning:tabset variant="scoped">
