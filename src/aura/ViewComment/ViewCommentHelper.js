@@ -1,18 +1,28 @@
-
 ({
     postComment : function (component) {
         var action = component.get("c.postComment");
+
         action.setParams({
             recordId : component.get("v.recordId"),
             comment : component.get("v.comment")
         });
         action.setCallback(this, function (response) {
             var records = JSON.parse(response.getReturnValue());
-            console.log(records);
+            var users = component.get("v.user");
+//            console.log(users);
             records.forEach(function(record){
-                record.linkName = helper.getUserName(component,record.userId);
-                record.Comment__c = record.comment;
+                var user = users.find(item => item.Id == record.userId);
+                if (user != undefined) {
+                    record.userId = user;
+                    record.comment = record.comment;
+                }
+                if (user == undefined){
+                   record.userId = 'test';
+                   record.comment = record.comment;
+                }
+
             });
+            console.log(records);
             component.set("v.data", records);
             component.set("v.comment", '');
         });
@@ -25,17 +35,22 @@
         toastEvent.fire();
         $A.enqueueAction(action);
     },
-    getUserName : function (component,userId) {
+    getUserName : function (component) {
         var action = component.get("c.getUserName");
         action.setParams({
-            userId : userId
+            recordId : component.get("v.recordId")
         });
         action.setCallback(this, function (response) {
            var records = response.getReturnValue();
-           records.forEach(function (record) {
-              record.linkName = record.Name;
-           });
+           // console.log(records.length);
+//            var users = new Array();
+// //           records.forEach(function (record) {
+//                users.push(records);
+// //           });
+//            console.log(users);
+            component.set("v.user",records);
         });
+//        console.log(component.get("v.user"));
         $A.enqueueAction(action);
     }
 })

@@ -5,34 +5,49 @@ public with sharing class ViewCommetCtrl {
         return rating.Comments__c;
     }
 
-    @AuraEnabled
+    @AuraEnabled (cacheable = false)
     public static String postComment (Id recordId, String comment) {
-        List<ViewCommetCtrl.StringWrapper> updateComment = new List<ViewCommetCtrl.StringWrapper>();
+        Map<Id,StringWrapper> updateMap = new Map<Id, StringWrapper>();
+        List<ViewCommetCtrl.StringWrapper> newListStringWrappers = new List<ViewCommetCtrl.StringWrapper>();
         Rating__c rating = [SELECT Comments__c FROM Rating__c WHERE Record_Id__c = :recordId];
         List<ViewCommetCtrl.StringWrapper> listStringWrappers = (List<ViewCommetCtrl.StringWrapper>) JSON.deserialize(rating.Comments__c, List<ViewCommetCtrl.StringWrapper>.class);
+        User user = [SELECT Id FROM User WHERE Id =: UserInfo.getUserId()];
         StringWrapper str = new StringWrapper();
-        str.userId = UserInfo.getUserId();
+        str.userId = user.Id;
         str.comment = comment;
 
         for (StringWrapper stringWrapper : listStringWrappers) {
-            if(stringWrapper.userId == str.userId && stringWrapper.comment != str.comment){
-                stringWrapper.comment = comment;
-                break;
-            } else {
-                updateComment.add(str);
-            }
+            updateMap.put(stringWrapper.userId, stringWrapper);
         }
-        updateComment.addAll(listStringWrappers);
-        rating.Comments__c = JSON.serialize(updateComment);
+
+        if (updateMap.containsKey(str.userId)) {
+            StringWrapper oldComment = updateMap.get(str.userId);
+            if (oldComment.comment != str.comment) {
+                oldComment.comment = str.comment;
+                updateMap.put(str.userId, oldComment);
+            }
+        } else if (! updateMap.containsKey(str.userId)) {
+            updateMap.put(str.userId, str);
+        }
+
+        newListStringWrappers.addAll(updateMap.values());
+        rating.Comments__c = JSON.serialize(newListStringWrappers);
         update  rating;
         return rating.Comments__c;
     }
 
     @AuraEnabled
-    public static User getUserName (Id userId) {
-        User user = [SELECT Id,Name FROM User WHERE Id =: userId];
-        system.debug('user--- ' + user);
-        return user;
+    public static List<User> getUserName (Id recordId) {
+        List<User> users = new List<User>();
+        Rating__c rating = [SELECT Comments__c FROM Rating__c WHERE Record_Id__c = :recordId];
+        List<ViewCommetCtrl.StringWrapper> listStringWrappers = (List<ViewCommetCtrl.StringWrapper>) JSON.deserialize(rating.Comments__c, List<ViewCommetCtrl.StringWrapper>.class);
+        for (StringWrapper stringWrapper : listStringWrappers) {
+            User user = [SELECT Id,Name FROM User WHERE Id =: stringWrapper.userId];
+            users.add(user);
+        }
+//        User user = [SELECT Id,Name FROM User WHERE Id =: userId];
+        system.debug('user--- ' + users);
+        return users;
     }
 
         public class StringWrapper {

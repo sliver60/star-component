@@ -1,50 +1,56 @@
 public with sharing class RatingController {
 
     @AuraEnabled
-    public static Integer getCurrentRating(Id recordId) {
-        Integer currentRating = 0;
-        Integer score =0;
+    public static Double getCurrentRating(Id recordId) {
+        Decimal currentRating = 0;
+        Decimal score =0;
         Rating__c rating = [SELECT Record_Id__c, Vote__c,Json__c, Participant__c FROM Rating__c WHERE Record_Id__c = :recordId];
         List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(rating.Json__c, List<RatingController.JSONWrapper>.class);
         for (JSONWrapper wrapper : listJsonWrappers) {
             score += wrapper.score;
-            currentRating = score / Integer.valueOf(rating.Participant__c);
+            currentRating = score / rating.Participant__c;
         }
-        return currentRating;
+        return currentRating.setScale(1, RoundingMode.CEILING);
     }
 
-    @AuraEnabled
-    public static Integer updateRating(Id recordId, Decimal rating) {
+    @AuraEnabled (cacheable = false)
+    public static Double updateRating(Id recordId, Decimal rating) {
         Rating__c updateRating = [SELECT Record_Id__c, Vote__c, Participant__c, Json__c FROM Rating__c WHERE Record_Id__c = :recordId];
         List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(updateRating.Json__c, List<RatingController.JSONWrapper>.class);
         List<RatingController.JSONWrapper> updatelistJsonWrappers = new List<RatingController.JSONWrapper>();
+        Map<Id,JSONWrapper> updateMap = new Map<Id, JSONWrapper>();
+        User user = [SELECT Id FROM User WHERE Id =: UserInfo.getUserId()];
 
         JSONWrapper wrapper = new JSONWrapper();
-        wrapper.userId = UserInfo.getUserId();
-        wrapper.score = Integer.valueOf(rating);
+        wrapper.userId = user.Id;
+        wrapper.score = rating;
 
         for (JSONWrapper jsWrapper : listJsonWrappers) {
-            if(jsWrapper.userId == wrapper.userId && jsWrapper.score != wrapper.score){
-                jsWrapper.score = Integer.valueOf(rating);
-                break;
-            } else {
-                updatelistJsonWrappers.add(wrapper);
-                updateRating.Participant__c += 1;
-                updateRating.Vote__c += 1;
-            }
+            updateMap.put(jsWrapper.userId, jsWrapper);
         }
 
-        updatelistJsonWrappers.addAll(listJsonWrappers);
+        if (updateMap.containsKey(wrapper.userId)) {
+            JSONWrapper oldComment = updateMap.get(wrapper.userId);
+            if (oldComment.score != wrapper.score) {
+                oldComment.score = wrapper.score;
+                updateMap.put(wrapper.userId, oldComment);
+            }
+        } else if (! updateMap.containsKey(wrapper.userId)) {
+            updateMap.put(wrapper.userId, wrapper);
+            updateRating.Participant__c += 1;
+        }
+
+        updatelistJsonWrappers.addAll(updateMap.values());
         updateRating.Json__c = JSON.serialize(updatelistJsonWrappers);
 
-        if (updateRating.Vote__c == 0 && updateRating.Participant__c == 0) {
-            updateRating.Participant__c += 1;
-            updateRating.Vote__c += 1;
-        }
+//        if (updateRating.Vote__c == 0 && updateRating.Participant__c == 0) {
+//            updateRating.Participant__c += 1;
+//            updateRating.Vote__c += 1;
+//        }
 
         update updateRating;
-        Integer currentScore = getCurrentRating(recordId);
-        return currentScore;
+        Decimal currentScore = getCurrentRating(recordId);
+        return currentScore.setScale(1, RoundingMode.CEILING);
     }
 
     @AuraEnabled
@@ -63,49 +69,33 @@ public with sharing class RatingController {
         rating.Json__c = JSON.serialize(newListJsonWrappers);
         rating.Comments__c = JSON.serialize(newListStringWrappers);
         insert rating;
-        return Integer.valueOf(rating.Vote__c);
+        return Integer.valueOf(wrapper.score = 0);
 //        return 'Suc';
     }
 
-    @AuraEnabled
-    public static Integer getUserRating(Id recordId) {
-        Integer userScore;
-        Rating__c rating = [SELECT Json__c FROM Rating__c WHERE Record_Id__c = :recordId];
-        List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(rating.Json__c, List<RatingController.JSONWrapper>.class);
-        for (JSONWrapper wrapper : listJsonWrappers) {
-            if(wrapper.userId == UserInfo.getUserId()){
-                userScore = wrapper.score;
-            }
-        }
-        system.debug(userScore);
-        return userScore;
-    }
-
 //    @AuraEnabled
-//    public static void postComment (Id recordId, String comment) {
-//        List<RatingController.StringWrapper> updateComment = new List<RatingController.StringWrapper>();
-//        Rating__c rating = [SELECT Comments__c FROM Rating__c WHERE Record_Id__c = :recordId];
-//        List<RatingController.StringWrapper> listStringWrappers = (List<RatingController.StringWrapper>) JSON.deserialize(rating.Comments__c, List<RatingController.StringWrapper>.class);
-//        StringWrapper str = new StringWrapper();
-//        str.userId = UserInfo.getUserId();
-//        str.comment = comment;
-//
-//        for (StringWrapper stringWrapper : listStringWrappers) {
-//            if(stringWrapper.userId == str.userId && stringWrapper.comment != str.comment){
-//                stringWrapper.comment = comment;
-//                break;
-//            } else {
-//                updateComment.add(str);
+//    public static Double getUserRating(Id recordId) {
+//        Decimal userScore;
+//        Rating__c rating = [SELECT Json__c FROM Rating__c WHERE Record_Id__c = :recordId];
+//        List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(rating.Json__c, List<RatingController.JSONWrapper>.class);
+//        for (JSONWrapper wrapper : listJsonWrappers) {
+//            if(wrapper.userId == UserInfo.getUserId()){
+//                userScore = wrapper.score;
 //            }
 //        }
-//        updateComment.addAll(listStringWrappers);
-//        rating.Comments__c = JSON.serialize(updateComment);
-//        update  rating;
+//        system.debug(userScore);
+//        return userScore.setScale(1, RoundingMode.CEILING);
 //    }
+
+    @AuraEnabled (cacheable = false)
+    public static Boolean checkRating(Id recordId) {
+        List<Rating__c> rating = [SELECT Id FROM Rating__c WHERE Record_Id__c =: recordId];
+        return !rating.isEmpty() ? true : false;
+    }
 
     public class JSONWrapper {
         public Id userId;
-        public Integer score;
+        public Decimal score;
     }
 
     public class StringWrapper {

@@ -12,14 +12,17 @@
 .THIS .star-rating img{
     width:2rem;
 }
-.THIS div.slds-card__body{
-    padding: 0 10px;
+.THIS div.card__body{
+    padding: 0 15px;
     height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-.THIS div.slds-card__body .loading-div{
+.THIS div.card__body .loading-div{
     position: relative;
 }
-.THIS div.slds-card__body .loading-div .slds-spinner--small{
+.THIS div.card__body .loading-div .slds-spinner--small{
     position: absolute;
     z-index: 9999;
     left: 45%;
