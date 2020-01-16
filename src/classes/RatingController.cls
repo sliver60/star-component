@@ -8,9 +8,16 @@ public with sharing class RatingController {
         List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(rating.Json__c, List<RatingController.JSONWrapper>.class);
         for (JSONWrapper wrapper : listJsonWrappers) {
             score += wrapper.score;
-            currentRating = score / rating.Participant__c;
         }
-        return currentRating.setScale(1, RoundingMode.CEILING);
+
+        if(rating.Participant__c == 1 && score == 0) {
+            currentRating.setScale(1, RoundingMode.CEILING);
+            return currentRating;
+        } else {
+            currentRating = score / rating.Participant__c;
+            currentRating.setScale(1, RoundingMode.CEILING);
+            return currentRating;
+        }
     }
 
     @AuraEnabled (cacheable = false)
@@ -43,19 +50,14 @@ public with sharing class RatingController {
         updatelistJsonWrappers.addAll(updateMap.values());
         updateRating.Json__c = JSON.serialize(updatelistJsonWrappers);
 
-//        if (updateRating.Vote__c == 0 && updateRating.Participant__c == 0) {
-//            updateRating.Participant__c += 1;
-//            updateRating.Vote__c += 1;
-//        }
-
         update updateRating;
         Decimal currentScore = getCurrentRating(recordId);
         return currentScore.setScale(1, RoundingMode.CEILING);
     }
 
     @AuraEnabled
-    public static Integer createNewRating(Id recordId) {
-        Rating__c rating = new Rating__c(Record_Id__c = recordId, Vote__c = 0, Participant__c = 0);
+    public static Double createNewRating(Id recordId) {
+        Rating__c rating = new Rating__c(Record_Id__c = recordId, Vote__c = 0, Participant__c = 1);
         List<RatingController.JSONWrapper> newListJsonWrappers = new List<RatingController.JSONWrapper>();
         List<RatingController.StringWrapper> newListStringWrappers = new List<RatingController.StringWrapper>();
         JSONWrapper wrapper = new JSONWrapper();
@@ -68,8 +70,9 @@ public with sharing class RatingController {
         newListStringWrappers.add(stringWrapper);
         rating.Json__c = JSON.serialize(newListJsonWrappers);
         rating.Comments__c = JSON.serialize(newListStringWrappers);
+        Decimal currentScore = 0;
         insert rating;
-        return Integer.valueOf(wrapper.score = 0);
+        return currentScore.setScale(1, RoundingMode.CEILING);
 //        return 'Suc';
     }
 
