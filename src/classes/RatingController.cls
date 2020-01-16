@@ -76,20 +76,6 @@ public with sharing class RatingController {
 //        return 'Suc';
     }
 
-//    @AuraEnabled
-//    public static Double getUserRating(Id recordId) {
-//        Decimal userScore;
-//        Rating__c rating = [SELECT Json__c FROM Rating__c WHERE Record_Id__c = :recordId];
-//        List<RatingController.JSONWrapper> listJsonWrappers = (List<RatingController.JSONWrapper>) JSON.deserialize(rating.Json__c, List<RatingController.JSONWrapper>.class);
-//        for (JSONWrapper wrapper : listJsonWrappers) {
-//            if(wrapper.userId == UserInfo.getUserId()){
-//                userScore = wrapper.score;
-//            }
-//        }
-//        system.debug(userScore);
-//        return userScore.setScale(1, RoundingMode.CEILING);
-//    }
-
     @AuraEnabled (cacheable = false)
     public static Boolean checkRating(Id recordId) {
         List<Rating__c> rating = [SELECT Id FROM Rating__c WHERE Record_Id__c =: recordId];
