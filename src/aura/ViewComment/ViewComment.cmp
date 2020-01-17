@@ -16,7 +16,7 @@
         <lightning:tile label="{!item.userId.Name}" href="{!'/' + item.userId.Id}">
             <dl class="slds-dl_horizontal">
                 <dt class="slds-dl_horizontal__label">
-                    <p class="slds-truncate" title="Company">Comment:</p>
+                    <p class="slds-truncate" title="Comment">Comment:</p>
                 </dt>
                 <dd class="slds-dl_horizontal__detail slds-tile__meta">
                     <p class="slds-truncate_container_75" title="Comment">{!item.comment}</p>

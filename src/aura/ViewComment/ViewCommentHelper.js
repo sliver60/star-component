@@ -1,5 +1,5 @@
 ({
-    postComment : function (component) {
+    postComment : function (component,helper) {
         var action = component.get("c.postComment");
 
         action.setParams({
@@ -26,6 +26,7 @@
             component.set("v.data", records);
             component.set("v.comment", '');
         });
+
         var toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
             "title": "Success!",
@@ -35,6 +36,7 @@
         toastEvent.fire();
         $A.enqueueAction(action);
     },
+
     getUserName : function (component) {
         var action = component.get("c.getUserName");
         action.setParams({
@@ -42,15 +44,10 @@
         });
         action.setCallback(this, function (response) {
            var records = response.getReturnValue();
-           // console.log(records.length);
-//            var users = new Array();
-// //           records.forEach(function (record) {
-//                users.push(records);
-// //           });
-//            console.log(users);
+           console.log(records);
             component.set("v.user",records);
         });
 //        console.log(component.get("v.user"));
         $A.enqueueAction(action);
-    }
+    },
 })

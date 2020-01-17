@@ -41,7 +41,7 @@
     },
 
     handlePostComment : function (component, event, helper) {
-        helper.postComment(component);
+        helper.postComment(component,helper);
     }
 
 

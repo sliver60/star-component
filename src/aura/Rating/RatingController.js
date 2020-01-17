@@ -24,5 +24,8 @@
         helper.insertRating(component,helper);
     },
 
+    handleDeleteRecord: function (component,event,helper) {
+        helper.deleteRating(component,helper);
+    }
 
 })

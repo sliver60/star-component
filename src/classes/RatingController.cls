@@ -11,12 +11,10 @@ public with sharing class RatingController {
         }
 
         if(rating.Participant__c == 1 && score == 0) {
-            currentRating.setScale(1, RoundingMode.CEILING);
-            return currentRating;
+            return currentRating.setScale(1, RoundingMode.CEILING);
         } else {
             currentRating = score / rating.Participant__c;
-            currentRating.setScale(1, RoundingMode.CEILING);
-            return currentRating;
+            return currentRating.setScale(1, RoundingMode.CEILING);
         }
     }
 
@@ -64,16 +62,23 @@ public with sharing class RatingController {
         wrapper.userId = UserInfo.getUserId();
         wrapper.score = 0;
         newListJsonWrappers.add(wrapper);
-        StringWrapper stringWrapper = new StringWrapper();
-        stringWrapper.userId = UserInfo.getUserId();
-        stringWrapper.comment = '';
-        newListStringWrappers.add(stringWrapper);
+//        StringWrapper stringWrapper = new StringWrapper();
+//        stringWrapper.userId = UserInfo.getUserId();
+//        stringWrapper.comment = '';
+//        newListStringWrappers.add(stringWrapper);
         rating.Json__c = JSON.serialize(newListJsonWrappers);
-        rating.Comments__c = JSON.serialize(newListStringWrappers);
+//        rating.Comments__c = JSON.serialize(newListStringWrappers);
         Decimal currentScore = 0;
         insert rating;
         return currentScore.setScale(1, RoundingMode.CEILING);
 //        return 'Suc';
+    }
+
+    @AuraEnabled
+    public static void deleteRating (Id recordId) {
+        Rating__c rating = [SELECT Id FROM Rating__c WHERE Record_Id__c =: recordId];
+        system.debug(rating);
+        delete rating;
     }
 
     @AuraEnabled (cacheable = false)
