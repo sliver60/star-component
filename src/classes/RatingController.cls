@@ -11,12 +11,10 @@ public with sharing class RatingController {
         }
 
         if(rating.Participant__c == 1 && score == 0) {
-            currentRating.setScale(1, RoundingMode.CEILING);
-            return currentRating;
+            return currentRating.setScale(1, RoundingMode.CEILING);
         } else {
             currentRating = score / rating.Participant__c;
-            currentRating.setScale(1, RoundingMode.CEILING);
-            return currentRating;
+            return currentRating.setScale(1, RoundingMode.CEILING);
         }
     }
 

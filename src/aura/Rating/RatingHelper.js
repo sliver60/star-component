@@ -1,9 +1,9 @@
 ({
     loadRatingElement: function (component, helper, ratingElement) {
         $(ratingElement).raty({
-            starOff: '/resource/RatingPlugin/images/star_off_darkgray.png',
-            starOn: '/resource/RatingPlugin/images/star_p.png',
-            starHalf: '/resource/RatingPlugin/images/star-half-mono.png',
+            starOff: '/resource/RatingPlugin/images/star_off-darkgray.svg',
+            starOn: '/resource/RatingPlugin/images/star_p.svg',
+            starHalf: '/resource/RatingPlugin/images/halfstar.svg',
             half: true,
             halfShow: true,
             click: function (score, evt) {
@@ -100,7 +100,7 @@
     },
     checkRating: function (component, helper) {
         var self = this;
-
+        
         var action = component.get("c.checkRating");
         action.setParams({
             recordId: component.get("v.recordId")

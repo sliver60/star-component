@@ -1,6 +1,6 @@
 ({
     doInit: function (component, event, helper) {
-        helper.checkRating(component,helper);
+        helper.checkRating(component, helper);
 //             var ratingElement = component.find("starRating").getElement();
 // //            helper.checkRating(component);
 //             helper.loadRatingElement(component, helper, ratingElement);
@@ -21,7 +21,7 @@
     },
 
     handleInsertRecord: function (component, event, helper) {
-        helper.insertRating(component,helper);
+        helper.insertRating(component, helper);
     },
 
 

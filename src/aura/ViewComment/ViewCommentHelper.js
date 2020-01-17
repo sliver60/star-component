@@ -42,12 +42,6 @@
         });
         action.setCallback(this, function (response) {
            var records = response.getReturnValue();
-           // console.log(records.length);
-//            var users = new Array();
-// //           records.forEach(function (record) {
-//                users.push(records);
-// //           });
-//            console.log(users);
             component.set("v.user",records);
         });
 //        console.log(component.get("v.user"));
