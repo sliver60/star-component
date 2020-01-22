@@ -51,3 +51,11 @@
 .THIS .ql-font-serif {
     font-family: serif;
 }
+.THIS .rating_write{
+    float: right;
+    padding-right: 0.75rem;
+}
+.THIS .quantity_rating{
+    color:#ab1352;
+    font-weight: 600;
+}

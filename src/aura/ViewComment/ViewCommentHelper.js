@@ -50,4 +50,26 @@
 //        console.log(component.get("v.user"));
         $A.enqueueAction(action);
     },
+
+    deleteRating : function (component,event,helper) {
+        var action = component.get("c.deleteRating");
+
+        action.setParams({
+            recordId : component.get("v.recordId")
+        });
+
+        action.setCallback(this, function (response) {
+            var compEvents = component.getEvent("handleDeleteRecordEvent");// getting the Instance of event
+            compEvents.setParams({ "check" : false });// setting the attribute of event
+            compEvents.fire();// firing the event.
+            var toastEvent = $A.get("e.force:showToast");
+            toastEvent.setParams({
+                "title": "Success!",
+                "message": "Rating deleted",
+                "type": 'success'
+            });
+            toastEvent.fire();
+        });
+        $A.enqueueAction(action);
+    }
 })

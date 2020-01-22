@@ -8,13 +8,14 @@
     <aura:attribute type="Boolean" name = "showBool" default="true"/>
     <aura:attribute type="String" name= "plainText" />
 
+    <aura:handler name="handleDeleteRecordEvent" event="c:EventForCheckRating" action="{!c.handleEvent}"></aura:handler>
+
     <aura:if isTrue="{!v.showBool}">
     <lightning:tabset variant="scoped">
     <lightning:tab label="Rating">
         <lightning:card title="{!v.plainText}">
-            <aura:set attribute="actions">
-                <lightning:button variant="destructive" label="Delete Rating" title="Delete" onclick="{!c.handleDeleteRecord}"/>
-            </aura:set>
+            <div class="rating_write"><span style="color:#808080;">Current Rating: </span> <span class="quantity_rating" aura:id="rating">{!v.currentRating}&nbsp;star&nbsp;</span></div>
+
             <p class="slds-p-horizontal_small">
             <div class="slds-card__body card__body">
                 <div class="loading-div" style="height:6rem">
@@ -27,16 +28,18 @@
                     </div>
                 </div>
                 <div aura:id="starRating" class="star-rating"></div>
-                <div><span style="color:#808080;">Current Rating:</span> <span aura:id="rating">{!v.currentRating}&nbsp;star&nbsp;</span></div>
+
 
             </div>
+            <c:ViewComment recordId = "{!v.recordId}">
+            </c:ViewComment>
             </p>
         </lightning:card>
+
     </lightning:tab>
         <lightning:tab label="Comments">
     <div>
-        <c:ViewComment recordId = "{!v.recordId}">
-        </c:ViewComment>
+
     </div>
         </lightning:tab>
         </lightning:tabset>

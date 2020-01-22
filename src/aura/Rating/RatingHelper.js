@@ -1,38 +1,29 @@
 ({
     loadRatingElement: function (component, helper, ratingElement) {
-        $(ratingElement).raty({
-            starOff: '/resource/RatingPlugin/images/star_off-darkgray.svg',
-            starOn: '/resource/RatingPlugin/images/star_p.svg',
-            starHalf: '/resource/RatingPlugin/images/halfstar.svg',
-            half: true,
-            halfShow: true,
+
+        $(ratingElement).raty({  
+            starOff: $A.get('$Resource.RatingPlugin') + '/images/star_off-darkgray.svg',
+            starOn: $A.get('$Resource.RatingPlugin') + '/images/star_p.svg',
+            starHalf: $A.get('$Resource.RatingPlugin') + '/images/halfstar.svg',
+            // half: true,
+            halfShow: false,
+            // precision: true,
             round : { down: .26, full: .6, up: .76 },
+            number : 20,
+            
             click: function (score, evt) {
                 if (score == null) score = component.get("v.currentRating");
+                alert(score.toFixed(2));
                     var result = confirm('Click OK button to confirm update Rating.');
                     if (result) {
                         component.set("v.currentRating", score);
                         helper.updateRating(component);
                         $(".star-rating, .loading-div, .footer-contents").toggle();
-//                     helper.getCurrentRating(component);
-//                     $(".star-rating, .loading-div, .footer-contents").toggle();
+                    }else {
+                        return false;
                     }
-//                helper.getCurrentRating(component);
-//                $(".star-rating, .loading-div, .footer-contents").toggle();
-//                 if(component.get("v.currentRating") != score ){
-//                     var result = confirm('Click OK button to confirm update Rating.');
-//                     if( result ){
-//                         component.set("v.newRating", score);
-// //                        component.get("v.currentRating");
-//                         $(".star-rating, .loading-div, .footer-contents").toggle();
-// //                        helper.getCurrentRating(component);
-//                         helper.updateRating( component );
-// //                        helper.getUserRating(component);
-//                     }else{
-//                         return false;
-//                     }
-//                 }
             },
+          
         });
     },
     updateRating: function (component) {
@@ -119,26 +110,5 @@
         });
         $A.enqueueAction(action);
     },
-
-    deleteRating : function (component,helper) {
-        var self = this;
-        var action = component.get("c.deleteRating");
-
-        action.setParams({
-           recordId : component.get("v.recordId")
-        });
-
-        action.setCallback(this, function (response) {
-            component.set("v.showBool", false);
-            var toastEvent = $A.get("e.force:showToast");
-            toastEvent.setParams({
-                "title": "Success!",
-                "message": "Rating deleted",
-                "type": 'success'
-            });
-            toastEvent.fire();
-        });
-        $A.enqueueAction(action);
-    }
 
 })

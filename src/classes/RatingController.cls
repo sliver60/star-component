@@ -57,28 +57,14 @@ public with sharing class RatingController {
     public static Double createNewRating(Id recordId) {
         Rating__c rating = new Rating__c(Record_Id__c = recordId, Vote__c = 0, Participant__c = 1);
         List<RatingController.JSONWrapper> newListJsonWrappers = new List<RatingController.JSONWrapper>();
-        List<RatingController.StringWrapper> newListStringWrappers = new List<RatingController.StringWrapper>();
         JSONWrapper wrapper = new JSONWrapper();
         wrapper.userId = UserInfo.getUserId();
         wrapper.score = 0;
         newListJsonWrappers.add(wrapper);
-//        StringWrapper stringWrapper = new StringWrapper();
-//        stringWrapper.userId = UserInfo.getUserId();
-//        stringWrapper.comment = '';
-//        newListStringWrappers.add(stringWrapper);
         rating.Json__c = JSON.serialize(newListJsonWrappers);
-//        rating.Comments__c = JSON.serialize(newListStringWrappers);
         Decimal currentScore = 0;
         insert rating;
         return currentScore.setScale(1, RoundingMode.CEILING);
-//        return 'Suc';
-    }
-
-    @AuraEnabled
-    public static void deleteRating (Id recordId) {
-        Rating__c rating = [SELECT Id FROM Rating__c WHERE Record_Id__c =: recordId];
-        system.debug(rating);
-        delete rating;
     }
 
     @AuraEnabled (cacheable = false)
@@ -92,8 +78,8 @@ public with sharing class RatingController {
         public Decimal score;
     }
 
-    public class StringWrapper {
-        public Id userId;
-        public String comment;
-    }
+//    public class StringWrapper {
+//        public Id userId;
+//        public String comment;
+//    }
 }

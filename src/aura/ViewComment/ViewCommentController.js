@@ -42,6 +42,10 @@
 
     handlePostComment : function (component, event, helper) {
         helper.postComment(component,helper);
+    },
+
+    handleDeleteRecordEvent: function (component,event,helper) {
+        helper.deleteRating(component,event,helper);
     }
 
 

@@ -24,8 +24,8 @@
         helper.insertRating(component,helper);
     },
 
-    handleDeleteRecord: function (component,event,helper) {
-        helper.deleteRating(component,helper);
+    handleEvent : function(component, event, helper) {
+        var check = event.getParam("check");// getting the value of event attribute
+        component.set("v.showBool",check); // Setting the value of parent attribute with event attribute value
     }
-
 })

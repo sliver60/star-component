@@ -36,12 +36,10 @@ public with sharing class ViewCommetCtrl {
             newListStringWrappers.addAll(updateMap.values());
             rating.Comments__c = JSON.serialize(newListStringWrappers);
             update rating;
-//            return rating.Comments__c;
         } else {
             newListStringWrappers.add(str);
             rating.Comments__c = JSON.serialize(newListStringWrappers);
             update rating;
-//            return rating.Comments__c;
         }
         return rating.Comments__c;
     }
@@ -65,7 +63,14 @@ public with sharing class ViewCommetCtrl {
         return users;
     }
 
-        public class StringWrapper {
+    @AuraEnabled
+    public static void deleteRating (Id recordId) {
+        Rating__c rating = [SELECT Id FROM Rating__c WHERE Record_Id__c =: recordId];
+        system.debug(rating);
+        delete rating;
+    }
+
+    public class StringWrapper {
         public Id userId;
         public String comment;
     }
