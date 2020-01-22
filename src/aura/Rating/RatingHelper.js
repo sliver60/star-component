@@ -5,11 +5,10 @@
             starOff: $A.get('$Resource.RatingPlugin') + '/images/star_off-darkgray.svg',
             starOn: $A.get('$Resource.RatingPlugin') + '/images/star_p.svg',
             starHalf: $A.get('$Resource.RatingPlugin') + '/images/halfstar.svg',
-            // half: true,
-            halfShow: false,
+            half: true,
+            halfShow: true,
             // precision: true,
             round : { down: .26, full: .6, up: .76 },
-            number : 20,
             
             click: function (score, evt) {
                 if (score == null) score = component.get("v.currentRating");
@@ -23,7 +22,6 @@
                         return false;
                     }
             },
-          
         });
     },
     updateRating: function (component) {

@@ -1,34 +1,37 @@
 <aura:component controller="ViewCommetCtrl" implements="force:hasRecordId,flexipage:availableForAllPageTypes">
-    <aura:attribute name="data" type="SObject[]" />
+    <aura:attribute name="data" type="SObject[]"/>
     <aura:attribute name="comment" type="String"/>
     <aura:attribute name="user" type="User[]"/>
 
     <aura:handler name="init" value="{! this }" action="{!c.doInit}"/>
     <aura:registerevent name="handleDeleteRecordEvent" type="c:EventForCheckRating"/>
 
+    <div>
+        <lightning:textarea label="Add interesting comment" placeholder="Type here..." value="{!v.comment}"/>
+    </div>
+    <div class="buttons">
+        <div style="padding-right: 5px;">
+            <lightning:button variant="brand" label="Post" title="Save" onclick="{!c.handlePostComment}"/>
+        </div>
         <div>
-            <lightning:textarea label="Add interesting comment" placeholder="Type here..." value="{!v.comment}"/>
+            <lightning:button variant="destructive" label="Delete Rating" title="Delete"
+                              onclick="{!c.handleDeleteRecordEvent}"/>
         </div>
-        <div style="display: inline-block;">
-            <lightning:button variant="brand" label="Post" title="Save"  onclick="{!c.handlePostComment}" />
-        </div>
-        <div style="display: inline-block;">
-            <lightning:button variant="destructive" label="Delete Rating" title="Delete" onclick="{!c.handleDeleteRecordEvent}"/>
-        </div>
-        <aura:iteration items="{!v.data}" var="item">
+    </div>
+    <aura:iteration items="{!v.data}" var="item">
         <div>
-        <lightning:tile label="{!item.userId.Name}" href="{!'/' + item.userId.Id}">
-            <dl class="slds-dl_horizontal">
-                <dt class="slds-dl_horizontal__label">
-                    <p class="slds-truncate" title="Comment">Comment:</p>
-                </dt>
-                <dd class="slds-dl_horizontal__detail slds-tile__meta">
-                    <p class="slds-truncate_container_75" title="Comment">{!item.comment}</p>
-                </dd>
-            </dl>
-        </lightning:tile>
+            <lightning:tile label="{!item.userId.Name}" href="{!'/' + item.userId.Id}">
+                <dl class="slds-dl_horizontal">
+                    <dt class="slds-dl_horizontal__label">
+                        <p class="slds-truncate" title="Comment">Comment:</p>
+                    </dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                        <p class="slds-truncate_container_75" title="Comment">{!item.comment}</p>
+                    </dd>
+                </dl>
+            </lightning:tile>
         </div>
-        </aura:iteration>
+    </aura:iteration>
 
 
 </aura:component>
